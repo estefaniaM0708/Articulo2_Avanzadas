@@ -1,243 +1,241 @@
-# Análisis de Fourier y fuga espectral mediante FFT
+\documentclass[12pt]{article}
 
-## Descripción del proyecto
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{hyperref}
 
-Este repositorio contiene la implementación utilizada para analizar el fenómeno de **fuga espectral (*spectral leakage*)** en la representación de Fourier de una señal sinusoidal.
+\title{
+Descripción del código implementado para el análisis de fuga espectral mediante FFT
+}
 
-El desarrollo está basado en el comportamiento descrito en el artículo:
+\author{
+Alix E. Maldonado
+}
 
-**DDSP: Differentiable Digital Signal Processing**  
-Engel et al. (2020)
+\date{}
 
-donde se explica que una señal cuya frecuencia no coincide exactamente con la base discreta utilizada por Fourier puede presentar una distribución de energía entre componentes frecuenciales cercanas.
 
-El objetivo del código es comparar dos escenarios:
+\begin{document}
 
-1. Una señal cuya frecuencia no coincide con un punto de la FFT, generando fuga espectral.
-2. Una señal modificada cuya frecuencia coincide con un punto de la FFT, reduciendo la dispersión espectral.
+\maketitle
 
----
 
-# Versión inicial del código
+\section{Descripción general}
 
-El código inicial fue desarrollado para generar una señal sinusoidal y analizar su representación frecuencial mediante la Transformada Rápida de Fourier (FFT).
+El código desarrollado tiene como objetivo analizar la representación de
+una señal sinusoidal mediante la Transformada Rápida de Fourier (FFT) y
+observar el fenómeno de fuga espectral.
 
-La estructura inicial realizaba los siguientes pasos:
+La implementación se basa en el comportamiento descrito en el artículo
+\textit{DDSP: Differentiable Digital Signal Processing}, donde se explica
+que una señal cuya frecuencia no coincide con la base discreta de Fourier
+puede presentar una distribución de energía entre frecuencias cercanas.
 
-1. Definición de los parámetros de simulación:
 
-- Frecuencia de muestreo.
-- Tiempo de análisis.
-- Número de muestras.
+Inicialmente el código fue planteado para generar una señal sinusoidal,
+calcular su FFT y observar su representación en frecuencia. A partir de
+esta primera versión se realizaron modificaciones para poder comparar
+diferentes condiciones de análisis.
 
-2. Generación de una señal sinusoidal:
 
-\[
+
+\section{Código inicial}
+
+La primera versión del código permitía:
+
+\begin{itemize}
+
+\item Definir la frecuencia de muestreo y el tiempo de análisis.
+
+\item Generar una señal sinusoidal.
+
+\item Calcular la Transformada Rápida de Fourier mediante la función
+\texttt{fft()}.
+
+\item Obtener la representación frecuencial de la señal.
+
+\item Graficar el espectro obtenido.
+
+\end{itemize}
+
+
+La señal inicial utilizada fue:
+
+
+\begin{equation}
 x_1(t)=\cos(2\pi445t)
-\]
+\end{equation}
 
 
-3. Cálculo de la Transformada Rápida de Fourier:
-
-\[
-X[k]=FFT(x[n])
-\]
+Esta señal fue seleccionada debido a que, con la resolución utilizada,
+su frecuencia no coincide exactamente con un punto de la FFT, permitiendo
+observar la fuga espectral.
 
 
-4. Obtención del vector de frecuencias:
 
-\[
-f_k=\frac{kf_s}{N}
-\]
+\section{Modificaciones realizadas}
 
-
-5. Representación gráfica del espectro obtenido.
+Para ampliar el análisis se realizaron cambios sobre el código inicial.
 
 
-El código inicial permitía observar la distribución frecuencial de una señal, pero solamente analizaba un único caso y no permitía comparar el efecto de modificar los parámetros de la señal.
+La principal modificación fue agregar una segunda señal de comparación:
 
----
 
-# Modificaciones realizadas al código original
-
-Para realizar el análisis completo de fuga espectral fue necesario ampliar la implementación inicial.
-
-Las principales modificaciones fueron:
-
----
-
-## 1. Inclusión de una segunda señal de comparación
-
-Se agregó una nueva señal modificada:
-
-\[
+\begin{equation}
 x_2(t)=1.5\cos(2\pi440t+\frac{\pi}{4})
-\]
+\end{equation}
 
 
-Esta modificación permitió comparar:
-
-### Señal original
-
-\[
-f_0=445Hz
-\]
+Con esta modificación fue posible comparar:
 
 
-donde:
+\begin{itemize}
 
-\[
-k=\frac{445}{10}=44.5
-\]
+\item Una señal con fuga espectral debido a la frecuencia de 445 Hz.
 
+\item Una señal cuya frecuencia coincide con un punto de la FFT utilizando
+440 Hz.
 
-La frecuencia queda ubicada entre dos puntos de la FFT y genera fuga espectral.
-
-
----
-
-### Señal modificada
-
-\[
-f_0=440Hz
-\]
+\end{itemize}
 
 
-donde:
-
-\[
-k=\frac{440}{10}=44
-\]
+Además, se modificaron algunos parámetros de la señal:
 
 
-La frecuencia coincide exactamente con un punto del espectro, permitiendo una representación más localizada.
+\begin{itemize}
 
----
+\item Amplitud.
 
-# 2. Variación de amplitud y fase
+\item Frecuencia.
 
-Además del cambio de frecuencia se añadieron modificaciones en:
+\item Fase.
 
-## Amplitud
+\item Número de muestras.
 
-Se pasó de:
+\item Frecuencia de muestreo.
 
-\[
-A=1
-\]
-
-a:
-
-\[
-A=1.5
-\]
+\end{itemize}
 
 
-Esto permitió observar cómo la amplitud afecta directamente la magnitud de los componentes espectrales.
+Estos cambios permitieron evaluar cómo la configuración utilizada afecta
+la representación obtenida mediante Fourier.
 
 
----
 
-## Fase
+\section{Análisis agregado al código}
 
-Se modificó:
-
-\[
-\phi=0
-\]
-
-a:
-
-\[
-\phi=\frac{\pi}{4}
-\]
+Después de la modificación inicial se añadieron cálculos adicionales para
+facilitar la interpretación de los resultados.
 
 
-Este cambio permitió analizar el desplazamiento temporal de la señal sin modificar su frecuencia principal.
-
----
-
-# 3. Obtención de datos espectrales
-
-El código fue ampliado para obtener información adicional del espectro:
-
-- Frecuencia de cada componente.
-- Magnitud asociada.
-- Ubicación del pico principal.
-- Comparación entre señales.
+Se incorporó el cálculo de la resolución frecuencial:
 
 
-Esto permitió generar tablas con los componentes principales obtenidos mediante FFT.
-
----
-
-# 4. Análisis de resolución frecuencial
-
-Se añadió el cálculo automático de la resolución frecuencial:
-
-\[
+\begin{equation}
 \Delta f=\frac{f_s}{N}
-\]
+\end{equation}
 
 
-Para el caso principal:
-
-\[
-\Delta f=
-\frac{16000}{1600}
-=
-10Hz
-\]
+y la relación entre la frecuencia de la señal y la posición dentro del
+espectro:
 
 
-Este cálculo permite determinar si una frecuencia coincide con la base discreta de Fourier.
-
-
-También se añadió el cálculo:
-
-\[
+\begin{equation}
 k=\frac{f_0}{\Delta f}
-\]
+\end{equation}
 
 
-para identificar si la frecuencia analizada corresponde a un bin exacto de la FFT.
 
----
-
-# 5. Reconstrucción y convergencia
-
-Se agregó una etapa adicional para evaluar la reconstrucción mediante diferentes cantidades de coeficientes de Fourier.
+Esto permitió determinar si una frecuencia coincidía o no con un punto
+discreto de la FFT.
 
 
-Se analizaron diferentes valores de:
+También se añadieron comparaciones entre la señal original y modificada,
+permitiendo generar las gráficas utilizadas en el análisis:
 
-\[
-K
-\]
+\begin{itemize}
+
+\item Comparación temporal.
+
+\item Comparación frecuencial mediante FFT.
+
+\item Reconstrucción mediante diferentes coeficientes de Fourier.
+
+\item Observación del fenómeno de Gibbs.
+
+\end{itemize}
 
 
-permitiendo observar que:
 
-\[
-K\uparrow
-\Rightarrow
-Error\downarrow
-\]
+\section{Pruebas realizadas}
+
+Además del caso utilizado en el informe, se realizaron pruebas cambiando
+los valores de frecuencia, amplitud, fase, frecuencia de muestreo y número
+de muestras.
+
+Estas pruebas permitieron observar cómo la resolución frecuencial cambia
+la representación obtenida y determinar qué configuraciones generaban
+mayor o menor fuga espectral.
 
 
-Es decir, al aumentar la cantidad de términos utilizados, la señal reconstruida se aproxima más a la señal original.
+Los resultados de estas pruebas se encuentran en el archivo:
 
----
+\begin{center}
+\texttt{Pruebas\_Fourier\_50\_experimentos.xlsx}
+\end{center}
 
-# 6. Evaluación del fenómeno de Gibbs
 
-También se añadió una sección para observar el comportamiento de la reconstrucción cerca de los límites de la señal.
 
-Esto permitió analizar las oscilaciones generadas por la extensión periódica de Fourier cuando existe una discontinuidad.
+\section{Resultados obtenidos}
 
----
+La modificación del código permitió comprobar que una señal de 445 Hz no
+queda representada en una única componente debido a que:
 
-# Estructura del código final
 
-La versión final del código contiene los siguientes módulos:
+\begin{equation}
+\frac{445}{10}=44.5
+\end{equation}
+
+
+Por lo tanto, la energía aparece distribuida principalmente alrededor de
+440 Hz y 450 Hz.
+
+
+Al modificar la frecuencia a 440 Hz:
+
+
+\begin{equation}
+\frac{440}{10}=44
+\end{equation}
+
+
+la señal coincide con un punto de la FFT y presenta una representación
+más concentrada.
+
+
+
+\section{Repositorio}
+
+El código completo utilizado para generar las señales, calcular la FFT y
+obtener las gráficas se encuentra disponible en:
+
+
+\begin{center}
+\url{https://github.com/estefaniaM0708/Articulo2_Avanzadas}
+\end{center}
+
+
+
+\section{Referencia}
+
+Engel, J., Hantrakul, L., Gu, C., \& Roberts, A. (2020).
+
+\textit{DDSP: Differentiable Digital Signal Processing}.
+
+International Conference on Learning Representations (ICLR).
+
+
+\end{document}
 
