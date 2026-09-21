@@ -4,7 +4,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from pathlib import Path
 
-//REPRESENTACION DE FOURIER Y FUGA ESPECTRAL
+# REPRESENTACION DE FOURIER Y FUGA ESPECTRAL
 
 // 1. Parámetros comunes
 
@@ -41,7 +41,7 @@ phi2 = np.pi / 4      # 45 grados
 x2 = A2 * np.cos(2 * np.pi * f2 * t + phi2)
 
 
-//FUNCIONES AUXILIARES
+# FUNCIONES AUXILIARES
 
 
 def coef_fourier_complejo(k, A, f0, phi, T):
